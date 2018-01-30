@@ -7,15 +7,15 @@ body { font-family: "bbc reith sans"}
 .hypothesis { width: 800px; height: 400px; background: lightgray; border: 8px solid gray; box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);}
 .hypothesis { font-size: 1.5em; padding: 16px; } 
 .hypothesis div { margin-top: 1.5em; }
-.editable { cursor: pointer; color: gray;}
+.editable { cursor: pointer; color: gray; text-decoration: underline;}
 .editable:hover { color: blue;}
 .editable textarea { font-size: 1em; width: 100%; 
-background: lightgrey; color: gray;}
+background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 </style>
 <script src="/js/jquery/jquery.min.js"></script>
 <script>
     $( function() {
-        console.log('hello world!');
+        console.log('Hello Hypothicator!');
 
         $('#capability').addClass('editable');
         $('#outcome').addClass('editable');
@@ -25,7 +25,6 @@ background: lightgrey; color: gray;}
         $('.editable').click(function(){
             var name = $(this).text();
             var id = $(this).attr('id');
-            console.log(id);
             $(this).html('');
             $('<textarea></textarea>')
                 .attr({
@@ -35,7 +34,10 @@ background: lightgrey; color: gray;}
                 })
                 .on('blur', function() {
                     var name = $(this).val();
-                    console.log('blur');
+                    if (name=="") {
+                        var defaultName = $('#'+id).attr('data-default');
+                        name = defaultName || '<blank>';
+                    }
                     //alert('Make an AJAX call and pass this parameter >> name=' + name);
                     $('#'+id).text(name);
                 })
@@ -49,9 +51,9 @@ background: lightgrey; color: gray;}
 <body>
 <h1>Hypothesis</h1>
 <div class="hypothesis">
-<div class="capability"><strong>We believe</strong> <span id="capability">that increasing the size of hotel images on the booking page</span></div>
-<div class="outcome"><strong>Will result in</strong> <span id="outcome">improved customer engagement and conversion</span></div>
-<div class="metric"><strong>We will know we have succeeded when</strong> <span id="metric">we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</span></div>
+<div class="capability"><strong>We believe</strong> <span id="capability" data-default="&lt;this capability&gt;">that increasing the size of hotel images on the booking page</span></div>
+<div class="outcome"><strong>Will result in</strong> <span id="outcome" data-default="&lt;this outcome&gt;">improved customer engagement and conversion</span></div>
+<div class="metric"><strong>We will know we have succeeded when</strong> <span id="metric" data-default="&lt;we see a measurable signal&gt;">we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</span></div>
 </div>
 </body>
 </html>
