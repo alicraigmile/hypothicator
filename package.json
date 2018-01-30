@@ -8,7 +8,7 @@
     "clean": "echo 'clean'",
     "compile": "echo 'compile'",
     "pretest": "npm run clean && npm run compile",
-    "test": "mocha  test -u bdd -R dot",
+    "test": "mocha test/",
     "version:patch": "npm version patch",
     "push": "npm run push:git && npm run push:heroku",
     "push:git": "git push --tags origin HEAD:master",
