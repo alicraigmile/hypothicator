@@ -7,7 +7,7 @@ body { font-family: "bbc reith sans"}
 .hypothesis { width: 800px; height: 400px; background: lightgray;
  border: 1px solid lightgray;   
     box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);}
-.hypothesis { font-size: 1.5em;  } 
+.hypothesis { font-size: 1.5em; margin-bottom: 1em; } 
 .hypothesis h2 { margin: 0; padding: 0.5em 2em; color: gray; border-bottom: 3px solid gray; font-weight: normal; font-size: 0.8em;}
 .hypothesis div { margin: 1.5em; }
 .editable { cursor: pointer; color: gray; text-decoration: underline;}
@@ -28,8 +28,21 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
         $('#capability').addClass('editable');
         $('#outcome').addClass('editable');
         $('#metric').addClass('editable');
+        $('#capability2').addClass('editable');
+        $('#outcome2').addClass('editable');
+        $('#metric2').addClass('editable');
+
 
         $('.editable').attr('title', 'click to edit')
+
+        $('.editable').map(function(me) {
+            if ($(this).text() == '') {
+                var defaultName = $(this).attr('data-default');
+                name = defaultName || '<blank>';
+                $(this).text(name);                
+            }
+         });
+
         $('.editable').click(function(){
             
             if ($(this).find('textarea').exists()) {
@@ -69,6 +82,13 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 <div class="capability"><strong>We believe</strong> <span id="capability" data-default="&lt;this capability&gt;">that increasing the size of hotel images on the booking page</span></div>
 <div class="outcome"><strong>Will result in</strong> <span id="outcome" data-default="&lt;this outcome&gt;">improved customer engagement and conversion</span></div>
 <div class="metric"><strong>We will know we have succeeded when</strong> <span id="metric" data-default="&lt;we see a measurable signal&gt;">we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</span></div>
+</div>
+
+<div class="hypothesis">
+<h2>Hypothesis #2</h2>
+<div class="capability"><strong>We believe</strong> <span id="capability2" data-default="&lt;this capability&gt;"></span></div>
+<div class="outcome"><strong>Will result in</strong> <span id="outcome2" data-default="&lt;this outcome&gt;"></span></div>
+<div class="metric"><strong>We will know we have succeeded when</strong> <span id="metric2" data-default="&lt;we see a measurable signal&gt;"></span></div>
 </div>
 </body>
 </html>
