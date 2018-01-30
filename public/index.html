@@ -18,7 +18,7 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
     $.fn.exists = function () {
         return this.length !== 0;
     }
-    
+
     $( function() {
         console.log('Hello Hypothicator!');
 
@@ -52,7 +52,7 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                     //alert('Make an AJAX call and pass this parameter >> name=' + name);
                     $('#'+id).text(name);
                 })
-                .append(name)
+                .text(name)
                 .appendTo('#'+id);
             $('#txt_' + id).focus();
         });
