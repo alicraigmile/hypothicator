@@ -9,7 +9,7 @@ body { font-family: "bbc reith sans"}
 .hypothesis div { margin-top: 1.5em; }
 .editable { cursor: pointer; color: gray;}
 .editable:hover { color: blue;}
-.editable textarea { font-size: 0.9em; width: 100%; 
+.editable textarea { font-size: 1em; width: 100%; 
 background: lightgrey; color: gray;}
 </style>
 <script src="/js/jquery/jquery.min.js"></script>
@@ -18,29 +18,31 @@ background: lightgrey; color: gray;}
         console.log('hello world!');
 
         $('#capability').addClass('editable');
+        $('#outcome').addClass('editable');
+        $('#metric').addClass('editable');
 
         $('.editable').attr('title', 'click to edit')
         $('.editable').click(function(){
             var name = $(this).text();
+            var id = $(this).attr('id');
+            console.log(id);
             $(this).html('');
             $('<textarea></textarea>')
                 .attr({
                     'type': 'text',
-                    'name': 'fcapability',
-                    'id': 'txt_capability'                    
+                    'name': 'f' + id,
+                    'id': 'txt_' + id                    
+                })
+                .on('blur', function() {
+                    var name = $(this).val();
+                    console.log('blur');
+                    //alert('Make an AJAX call and pass this parameter >> name=' + name);
+                    $('#'+id).text(name);
                 })
                 .append(name)
-                .appendTo('#capability');
-            $('#txt_capability').focus();
+                .appendTo('#'+id);
+            $('#txt_' + id).focus();
         });
-
-        $(document).on('blur','#txt_capability', function(){
-        var name = $(this).val();
-        //alert('Make an AJAX call and pass this parameter >> name=' + name);
-        $('#capability').text(name);
-        });
-
-
     });
 </script>
 </head>
@@ -48,8 +50,8 @@ background: lightgrey; color: gray;}
 <h1>Hypothesis</h1>
 <div class="hypothesis">
 <div class="capability"><strong>We believe</strong> <span id="capability">that increasing the size of hotel images on the booking page</span></div>
-<div class="outcome"><strong>Will result in</strong> improved customer engagement and conversion</div>
-<div class="success-metric"><strong>We will know we have succeeded when</strong> we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</div>
+<div class="outcome"><strong>Will result in</strong> <span id="outcome">improved customer engagement and conversion</span></div>
+<div class="metric"><strong>We will know we have succeeded when</strong> <span id="metric">we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</span></div>
 </div>
 </body>
 </html>
