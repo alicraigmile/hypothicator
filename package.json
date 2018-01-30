@@ -11,13 +11,17 @@
     "test": "mocha  test -u bdd -R dot",
     "version:patch": "npm version patch",
     "push": "npm run push:git && npm run push:heroku",
-    "push:git": "echo 'git push --tags origin HEAD:master'",
+    "push:git": "git push --tags origin HEAD:master",
     "push:heroku": "git push heroku master",
     "launch": "open https://hypothicator.herokuapp.com",
     "start": "node server.js"
   },
   "author": "Ali Craigmile <ali@craigmile.com> (http://ali.craigmile.com)",
   "license": "ISC",
+  "repository" : {
+     "type" : "git",
+     "url" : "https://github.com/alicraigmile/hypothicator.git"
+  },
   "dependencies": {
     "express": "^4.16.2",
     "jquery": "^3.3.1",
