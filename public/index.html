@@ -7,17 +7,47 @@ body { font-family: "bbc reith sans"}
 .hypothesis { width: 800px; height: 400px; background: lightgray; border: 8px solid gray; box-shadow: 8px 8px 8px rgba(0, 0, 0, 0.5);}
 .hypothesis { font-size: 1.5em; padding: 16px; } 
 .hypothesis div { margin-top: 1.5em; }
+.editable { cursor: pointer; color: gray;}
+.editable:hover { color: blue;}
+.editable textarea { font-size: 0.9em; width: 100%; 
+background: lightgrey; color: gray;}
 </style>
 <script src="/js/jquery/jquery.min.js"></script>
 <script>
-      $( function() {
-      });
+    $( function() {
+        console.log('hello world!');
+
+        $('#capability').addClass('editable');
+
+        $('.editable').attr('title', 'click to edit')
+        $('.editable').click(function(){
+            var name = $(this).text();
+            $(this).html('');
+            $('<textarea></textarea>')
+                .attr({
+                    'type': 'text',
+                    'name': 'fcapability',
+                    'id': 'txt_capability'                    
+                })
+                .append(name)
+                .appendTo('#capability');
+            $('#txt_capability').focus();
+        });
+
+        $(document).on('blur','#txt_capability', function(){
+        var name = $(this).val();
+        //alert('Make an AJAX call and pass this parameter >> name=' + name);
+        $('#capability').text(name);
+        });
+
+
+    });
 </script>
 </head>
 <body>
 <h1>Hypothesis</h1>
 <div class="hypothesis">
-<div class="capability"><strong>We believe</strong> <span class="capability-edit">that increasing the size of hotel images on the booking page</span></div>
+<div class="capability"><strong>We believe</strong> <span id="capability">that increasing the size of hotel images on the booking page</span></div>
 <div class="outcome"><strong>Will result in</strong> improved customer engagement and conversion</div>
 <div class="success-metric"><strong>We will know we have succeeded when</strong> we see a 5% increase in customers who review hotel images who then proceed to book in 48 hours.</div>
 </div>
