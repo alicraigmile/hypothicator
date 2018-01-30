@@ -14,6 +14,11 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 </style>
 <script src="/js/jquery/jquery.min.js"></script>
 <script>
+
+    $.fn.exists = function () {
+        return this.length !== 0;
+    }
+    
     $( function() {
         console.log('Hello Hypothicator!');
 
@@ -23,6 +28,12 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 
         $('.editable').attr('title', 'click to edit')
         $('.editable').click(function(){
+            
+            if ($(this).find('textarea').exists()) {
+                console.log('no');
+                return;
+            }
+
             var name = $(this).text();
             var id = $(this).attr('id');
             $(this).html('');
