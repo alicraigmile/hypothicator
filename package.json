@@ -2,13 +2,26 @@
   "name": "hypothicator",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "deploy:prod": "npm run test && npm run version:patch && npm run push && npm run launch",
+    "clean": "echo 'clean'",
+    "compile": "echo 'compile'",
+    "pretest": "npm run clean && npm run compile",
+    "test": "mocha  test -u bdd -R dot",
+    "version:patch": "npm version patch",
+    "push": "npm run push:git && npm run push:heroku",
+    "push:git": "echo 'git push --tags origin HEAD:master'",
+    "push:heroku": "git push heroku master",
+    "launch": "open https://hypothicator.herokuapp.com",
+    "start": "node server.js"
   },
   "author": "Ali Craigmile <ali@craigmile.com> (http://ali.craigmile.com)",
   "license": "ISC",
   "dependencies": {
-    "jquery": "^3.3.1"
+    "express": "^4.16.2",
+    "jquery": "^3.3.1",
+    "mocha": "^5.0.0",
+    "supertest": "^3.0.0"
   }
 }
