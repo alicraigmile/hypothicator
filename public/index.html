@@ -43,6 +43,9 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
             }
          });
 
+
+        $('.editable').each(function (i) { $(this).attr('tabindex', i + 2); });
+
         $('.editable').click(function(){
             
             if ($(this).find('textarea').exists()) {
@@ -57,7 +60,8 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                 .attr({
                     'type': 'text',
                     'name': 'f' + id,
-                    'id': 'txt_' + id                    
+                    'id': 'txt_' + id,
+                    'tabindex':  Number($(this).attr('tabindex'))+1                 
                 })
                 .on('blur', function() {
                     var name = $(this).val();
