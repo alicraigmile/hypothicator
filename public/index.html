@@ -22,6 +22,18 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
         return this.length !== 0;
     }
 
+    $.fn.enterKey = function (fnc) {
+        return this.each(function () {
+            $(this).keypress(function (ev) {
+                var keycode = (ev.keyCode ? ev.keyCode : ev.which);
+                if (keycode == '13') {
+                    fnc.call(this, ev);
+                }
+            })
+        })
+    }
+
+
     $( function() {
         console.log('Hello Hypothicator!');
 
@@ -44,10 +56,13 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
          });
 
 
+        //editable > textarea > editable > textarea
+        //we need to increment by 2 here to leave space for the textareas
         $('.editable').each(function (i) { $(this).attr('tabindex', i + 2); });
 
-        $('.editable').click(function(){
-            
+
+        function startEdit(event){
+
             if ($(this).find('textarea').exists()) {
                 console.log('no');  
                 return;
@@ -63,7 +78,7 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                     'id': 'txt_' + id,
                     'tabindex':  Number($(this).attr('tabindex'))+1                 
                 })
-                .on('blur', function() {
+                .on('blur', function stopEdit() {
                     var name = $(this).val();
                     if (name=="") {
                         var defaultName = $('#'+id).attr('data-default');
@@ -76,7 +91,14 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                 .select()
                 .appendTo('#'+id);
             $('#txt_' + id).focus();
-        });
+
+            event.preventDefault()
+
+        }
+
+        $('.editable').enterKey(startEdit);
+        $('.editable').click(startEdit);
+
     });
 </script>
 </head>
