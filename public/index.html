@@ -46,7 +46,7 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
         $('.editable').click(function(){
             
             if ($(this).find('textarea').exists()) {
-                console.log('no');
+                console.log('no');  
                 return;
             }
 
@@ -69,6 +69,7 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                     $('#'+id).text(name);
                 })
                 .text(name)
+                .select()
                 .appendTo('#'+id);
             $('#txt_' + id).focus();
         });
