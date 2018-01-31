@@ -18,17 +18,32 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 <script src="/js/jquery/jquery.min.js"></script>
 <script>
 
+    // load the hypotheses from memory
+    var sHypotheses = localStorage.hypotheses || "{}",
+        hypotheses = JSON.parse(sHypotheses);
+/*
+        $.each(hypotheses, function (id, text) {
+            $("#" + id).text(text)
+        });
+*/
+
     $.fn.exists = function () {
         return this.length !== 0;
     }
 
-    $.fn.enterKey = function (fnc) {
+    $.fn.keymap = function (mappings) {
         return this.each(function () {
-            $(this).keypress(function (ev) {
+            $(this).keydown(function (ev) {
                 var keycode = (ev.keyCode ? ev.keyCode : ev.which);
-                if (keycode == '13') {
-                    fnc.call(this, ev);
+                
+                for (var key in mappings) {
+                    if (keycode == key) {
+                        console.log(key + 'pressed');
+                        fnc = mappings[key];
+                        fnc.call(this, ev);
+                    }
                 }
+               
             })
         })
     }
@@ -44,15 +59,14 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
         $('#outcome2').addClass('editable');
         $('#metric2').addClass('editable');
 
-
         $('.editable').attr('title', 'click to edit')
 
         $('.editable').map(function(me) {
-            if ($(this).text() == '') {
-                var defaultName = $(this).attr('data-default');
-                name = defaultName || '<blank>';
-                $(this).text(name);                
-            }
+            var id = $(this).attr('id');
+            var defaultName = $(this).attr('data-default');
+            console.log('saved for ' + id + ' is ' + hypotheses[id])
+            name = hypotheses[id] || $(this).text() || defaultName || '<blank>';
+            $(this).text(name);                
          });
 
 
@@ -63,14 +77,47 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
 
         function startEdit(event){
 
+            //if already in edit mode, don't respond to the startEdit event again
             if ($(this).find('textarea').exists()) {
-                console.log('no');  
                 return;
             }
 
+            // create the textbox
             var name = $(this).text();
             var id = $(this).attr('id');
+
+            function saveEdit(event) {
+                console.log('saveEdit');
+                var name = $(this).val();
+
+                //if editable text is empty, show the default instead
+                if (name=="") {
+                    var defaultName = $('#'+id).attr('data-default');
+                    name = defaultName || '<blank>';
+                }
+
+                // save the value to memory
+                console.log('saving for ' + id + ' ->  ' + hypotheses[id])
+                hypotheses[id] = name
+                localStorage.hypotheses = JSON.stringify(hypotheses)
+
+                console.log('id after save is ' + id)
+                // remove the textarea and reinstate plain text
+                $('#'+id).text(name);
+                
+            }
+
+            function cancelEdit(event) {
+                console.log('cancelEdit');
+                var name = hypotheses[id];                  
+                $('#'+id).text(name).focus()
+            }
+
+            // make space for the textarea, remove any text 
+
             $(this).html('');
+
+            // add the textarea
             $('<textarea></textarea>')
                 .attr({
                     'type': 'text',
@@ -78,26 +125,25 @@ background: lightgrey; color: blue; border: 3px solid gray; outline: none;}
                     'id': 'txt_' + id,
                     'tabindex':  Number($(this).attr('tabindex'))+1                 
                 })
-                .on('blur', function stopEdit() {
-                    var name = $(this).val();
-                    if (name=="") {
-                        var defaultName = $('#'+id).attr('data-default');
-                        name = defaultName || '<blank>';
-                    }
-                    //alert('Make an AJAX call and pass this parameter >> name=' + name);
-                    $('#'+id).text(name);
-                })
                 .text(name)
                 .select()
-                .appendTo('#'+id);
-            $('#txt_' + id).focus();
+                .on('blur', saveEdit)
+                .appendTo('#'+id)
+                .focus()
+                .keymap({
+                    27: cancelEdit,
+                    13: function(event) {
+                        console.log('enter pressed. blurring textarea')
+                        $(this).trigger('blur');
+                    }
+                });
 
             event.preventDefault()
 
         }
-
-        $('.editable').enterKey(startEdit);
-        $('.editable').click(startEdit);
+        // add events fot 'enter' and 'space' keys
+        $('.editable').keymap({ 13: startEdit, 32: startEdit});
+         $('.editable').click(startEdit);
 
     });
 </script>
